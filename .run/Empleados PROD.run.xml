@@ -1,0 +1,16 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Empleados PROD" type="Application" factoryName="Application">
+    <envs>
+      <env name="PROFILE_ACTIVE" value="prod" />
+      <env name="DB_URL" value="jdbc:mysql://localhost:3306/empleados_prod" />
+      <env name="DB_USER" value="root" />
+      <env name="DB_PASSWORD" value="" />
+      <env name="SERVER_PORT" value="8086" />
+    </envs>
+    <option name="MAIN_CLASS_NAME" value="com.tecsup.EmpleadosAmbientesApplication" />
+    <module name="empleados-ambientes" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

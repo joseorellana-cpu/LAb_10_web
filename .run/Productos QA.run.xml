@@ -1,0 +1,16 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Productos QA" type="Application" factoryName="Application">
+    <envs>
+      <env name="PROFILE_ACTIVE" value="qa" />
+      <env name="DB_URL" value="jdbc:mysql://localhost:3306/productos_qa" />
+      <env name="DB_USER" value="root" />
+      <env name="DB_PASSWORD" value="" />
+      <env name="SERVER_PORT" value="8082" />
+    </envs>
+    <option name="MAIN_CLASS_NAME" value="com.tecsup.Lab05Application" />
+    <module name="productos-ambientes" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

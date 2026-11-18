@@ -1,0 +1,51 @@
+{
+  "info": {
+    "name": "Lab10 - Empleados (Spring Profiles)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:8080", "description": "dev=8080, qa=8082, test=8084, prod=8086" }
+  ],
+  "item": [
+    {
+      "name": "GET configuracion",
+      "request": { "method": "GET", "url": "{{baseUrl}}/configuracion" }
+    },
+    {
+      "name": "POST empleado",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": "{{baseUrl}}/empleados",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nombres\": \"Ana\",\n  \"apellidos\": \"Quispe Rojas\",\n  \"email\": \"ana.quispe@techsolutions.pe\",\n  \"sueldo\": 3500.50\n}"
+        }
+      }
+    },
+    {
+      "name": "GET empleados",
+      "request": { "method": "GET", "url": "{{baseUrl}}/empleados" }
+    },
+    {
+      "name": "GET empleado por id",
+      "request": { "method": "GET", "url": "{{baseUrl}}/empleados/1" }
+    },
+    {
+      "name": "PUT empleado",
+      "request": {
+        "method": "PUT",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": "{{baseUrl}}/empleados/1",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nombres\": \"Ana\",\n  \"apellidos\": \"Quispe Rojas\",\n  \"email\": \"ana.quispe@techsolutions.pe\",\n  \"sueldo\": 4200.00\n}"
+        }
+      }
+    },
+    {
+      "name": "DELETE empleado",
+      "request": { "method": "DELETE", "url": "{{baseUrl}}/empleados/1" }
+    }
+  ]
+}
