@@ -50,12 +50,35 @@ En IntelliJ: **Run → Edit Configurations** o usar directamente las configuraci
 | PUT | `/empleados/{id}` |
 | DELETE | `/empleados/{id}` |
 | GET | `/configuracion` |
+| GET | `/configuracion/conexion` |
 
 Respuesta de `/configuracion` en dev:
 
 ```json
 {"ambiente":"DESARROLLO","perfil":"dev","puerto":"8080","baseDatos":"empleados_dev"}
 ```
+
+`/configuracion/conexion` ejecuta `SELECT DATABASE()` en MySQL y compara la base realmente conectada con la del perfil activo:
+
+```json
+{"perfil":"dev","baseDatosEsperada":"empleados_dev","baseDatosConectada":"empleados_dev","conectado":true,"mensaje":"Conectado a la base de datos del perfil dev"}
+```
+
+## Lectura de propiedades
+
+| Forma | Dónde | Qué lee |
+|---|---|---|
+| `@Value` | `ConfiguracionService.ambiente` | `empresa.ambiente` |
+| `Environment` | `ConfiguracionService` | perfil activo (`getActiveProfiles`), puerto (`local.server.port`), URL de la base (`spring.datasource.url`) |
+
+## Errores de configuración
+
+| Escenario | Resultado |
+|---|---|
+| `PROFILE_ACTIVE=produccion` (perfil inexistente) | No arranca: `Perfil no válido: 'produccion'. Use uno de: dev, qa, test, prod` (`ValidadorPerfil`) |
+| `DB_URL` apunta a una base que no existe | No arranca: `Unknown database 'empleados_noexiste'` |
+| Perfil `prod` sin la tabla `empleado` | No arranca: `ddl-auto=validate` informa que falta la tabla |
+| Puerto ocupado por otra aplicación | No arranca: `Port 8080 was already in use`; se cambia con `SERVER_PORT` |
 
 ## Observaciones
 

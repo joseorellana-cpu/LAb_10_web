@@ -79,4 +79,12 @@ class EmpleadoControllerTests {
                 .andExpect(jsonPath("$.puerto").exists())
                 .andExpect(jsonPath("$.perfil").exists());
     }
+
+    @Test
+    void conexionVerificaLaBaseDeDatosRealmenteConectada() throws Exception {
+        mockMvc.perform(get("/configuracion/conexion"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.baseDatosEsperada").value("empleados_junit"))
+                .andExpect(jsonPath("$.conectado").value(true));
+    }
 }

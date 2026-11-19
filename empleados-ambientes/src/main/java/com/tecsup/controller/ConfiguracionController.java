@@ -1,48 +1,38 @@
 package com.tecsup.controller;
 
-import java.util.Arrays;
-
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.env.Environment;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.tecsup.dto.ConexionDTO;
 import com.tecsup.dto.ConfiguracionDTO;
+import com.tecsup.service.ConfiguracionService;
 
 /**
- * GET /configuracion -> muestra el ambiente con el que arrancó la aplicación.
- * Ejemplo (dev): {"ambiente":"DESARROLLO","perfil":"dev","puerto":"8080","baseDatos":"empleados_dev"}
+ * GET /configuracion          -> ambiente, perfil, puerto y base de datos configurados.
+ * GET /configuracion/conexion -> base de datos a la que la aplicación está conectada realmente.
  */
 @RestController
+@RequestMapping("/configuracion")
 public class ConfiguracionController {
 
-    private final Environment environment;
+    private final ConfiguracionService service;
 
-    @Value("${empresa.ambiente}")
-    private String ambiente;
-
-    @Value("${server.port:8080}")
-    private String puerto;
-
-    @Value("${spring.datasource.url}")
-    private String urlBaseDatos;
-
-    public ConfiguracionController(Environment environment) {
-        this.environment = environment;
+    public ConfiguracionController(ConfiguracionService service) {
+        this.service = service;
     }
 
-    @GetMapping("/configuracion")
+    @GetMapping
     public ConfiguracionDTO configuracion() {
-        String perfil = Arrays.stream(environment.getActiveProfiles())
-                .findFirst()
-                .orElse("default");
-        return new ConfiguracionDTO(ambiente, perfil, puerto, nombreBaseDatos(urlBaseDatos));
+        return service.configuracion();
     }
 
-    // jdbc:mysql://localhost:3306/empleados_dev?param=x  ->  empleados_dev
-    static String nombreBaseDatos(String url) {
-        String sinParametros = url.split("[?;]")[0];
-        int inicio = Math.max(sinParametros.lastIndexOf('/'), sinParametros.lastIndexOf(':'));
-        return sinParametros.substring(inicio + 1);
+    @GetMapping("/conexion")
+    public ResponseEntity<ConexionDTO> conexion() {
+        ConexionDTO conexion = service.verificarConexion();
+        HttpStatus status = conexion.conectado() ? HttpStatus.OK : HttpStatus.SERVICE_UNAVAILABLE;
+        return ResponseEntity.status(status).body(conexion);
     }
 }
